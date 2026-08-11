@@ -74,18 +74,22 @@ header{
 }
 .suggest-wrap.show{display:block}
 .suggestions{
-  display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:5px;
 }
-.suggestions::-webkit-scrollbar{display:none}
 .suggestion{
-  flex:0 0 auto;border:1px solid #34404c;background:#1a222b;
-  border-radius:9px;padding:7px 10px;text-align:left;max-width:230px;
-  font-family:"SFMono-Regular",Menlo,monospace;font-size:12px
+  min-width:0;border:1px solid #34404c;background:#1a222b;
+  border-radius:8px;padding:6px 8px;text-align:left;
+  font-family:"SFMono-Regular",Menlo,monospace;font-size:11px
 }
-.suggestion strong{display:block;color:#dbe8f5;font-size:13px}
+.suggestion strong{
+  display:block;color:#dbe8f5;font-size:12px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+}
 .suggestion small{
   display:block;color:var(--muted);margin-top:2px;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:205px
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis
 }
 
 .info{
@@ -114,16 +118,20 @@ header{
   padding-bottom:env(safe-area-inset-bottom);z-index:20
 }
 .keys{
-  display:flex;gap:7px;overflow-x:auto;
-  padding:7px 8px;scrollbar-width:none;touch-action:pan-x;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain
+  display:grid;
+  grid-template-columns:1.15fr repeat(4,1fr) repeat(4,1fr);
+  gap:5px;
+  padding:6px 7px;
 }
-.keys::-webkit-scrollbar{display:none}
 .key{
-  flex:0 0 auto;border:1px solid #303842;background:#1a2027;
-  border-radius:9px;min-width:44px;height:38px;padding:0 11px;
-  font-family:"SFMono-Regular",Menlo,monospace;font-size:13px;font-weight:600;
-  touch-action:pan-x
+  min-width:0;border:1px solid #303842;background:#1a2027;
+  border-radius:8px;height:36px;padding:0 4px;
+  font-family:"SFMono-Regular",Menlo,monospace;font-size:14px;font-weight:700;
+  touch-action:manipulation;
 }
+.key.nav{font-size:18px}
+.key.tab{color:var(--accent)}
+
 .key:active,.icon-btn:active,.suggestion:active{transform:scale(.97);background:#26303a}
 .keyboard-tools{
   display:none;align-items:center;justify-content:space-between;
@@ -141,6 +149,24 @@ header{
   padding:8px 12px;font-size:12px;transition:.18s ease
 }
 .toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (orientation:landscape) and (max-height:520px){
+  header{padding:5px 10px}
+  .logo{width:26px;height:26px;border-radius:7px}
+  .title{font-size:14px}
+  .subtitle{display:none}
+  .icon-btn{height:30px;min-width:34px;padding:0 8px;font-size:12px}
+  .info{display:none!important}
+  .cm-editor{font-size:14px}
+  .cm-content{padding-top:6px;padding-bottom:12px}
+  .keys{padding:4px 6px;gap:4px}
+  .key{height:31px;font-size:12px}
+  .key.nav{font-size:16px}
+  .suggest-wrap{padding:4px 6px 0}
+  .suggestion{padding:4px 6px}
+  .keyboard-tools{padding:0 7px 4px}
+}
+
 @media (min-width:800px){.app{max-width:900px;margin:auto;border-left:1px solid var(--line);border-right:1px solid var(--line)}}
 </style>
 </head>
@@ -151,7 +177,7 @@ header{
       <div class="logo">V</div>
       <div>
         <div class="title">VEX Pocket</div>
-        <div class="subtitle">scratch.vex · 자동 저장</div>
+        <div class="subtitle">scratch.vex · v0.4 · 자동 저장</div>
       </div>
     </div>
     <div class="actions">
@@ -164,7 +190,7 @@ header{
 
   <section class="info" id="info">
     <div class="info-top">
-      <div class="fn-name" id="fnName">VEX Pocket v0.3</div>
+      <div class="fn-name" id="fnName">VEX Pocket v0.4</div>
       <div class="status ok" id="status">✓ 기본 검사 통과</div>
     </div>
     <div class="signature" id="signature">함수나 attribute 위에 커서를 놓으면 설명을 표시합니다.</div>
@@ -176,16 +202,15 @@ header{
       <div class="suggestions" id="suggestions"></div>
     </div>
     <nav class="keys" aria-label="VEX 빠른 입력">
-      <button class="key" data-insert="@P">@P</button>
-      <button class="key" data-insert="@Cd">@Cd</button>
-      <button class="key" data-insert="@N">@N</button>
-      <button class="key" data-insert="@ptnum">@ptnum</button>
+      <button class="key tab" data-action="tab">⇥ Tab</button>
+      <button class="key nav" data-action="left">←</button>
+      <button class="key nav" data-action="up">↑</button>
+      <button class="key nav" data-action="down">↓</button>
+      <button class="key nav" data-action="right">→</button>
       <button class="key" data-insert="{}" data-cursor="-1">{ }</button>
       <button class="key" data-insert="[]" data-cursor="-1">[ ]</button>
       <button class="key" data-insert="()" data-cursor="-1">( )</button>
       <button class="key" data-insert=";">;</button>
-      <button class="key" data-insert="&quot;&quot;" data-cursor="-1">" "</button>
-      <button class="key" data-insert="    ">⇥</button>
     </nav>
     <div class="keyboard-tools">
       <span>VEX Quick Keys</span>
@@ -202,7 +227,7 @@ import { EditorView } from "https://esm.sh/@codemirror/view@6.38.1";
 import { StreamLanguage, syntaxHighlighting, HighlightStyle } from "https://esm.sh/@codemirror/language@6.11.2";
 import { tags } from "https://esm.sh/@lezer/highlight@1.2.1";
 
-const STORAGE_KEY="vex-pocket-code-v03";
+const STORAGE_KEY="vex-pocket-code-v04";
 const app=document.getElementById("app");
 const suggestWrap=document.getElementById("suggestWrap");
 const suggestionsEl=document.getElementById("suggestions");
@@ -294,8 +319,8 @@ const vexHighlight=HighlightStyle.define([
  {tag:tags.punctuation,color:"#aab5c0"}
 ]);
 
-const defaultCode=`// VEX Pocket v0.3
-// near 를 입력하면 아래 자동완성 바가 나타납니다.
+const defaultCode=`// VEX Pocket v0.4
+// near 를 입력하면 자동완성 후보가 나타납니다.
 
 vector center = getbbox_center(0);
 vector dir = normalize(@P - center);
@@ -347,6 +372,15 @@ function currentWord(state){
  return {word:text.slice(s,e),from:s,to:e}
 }
 
+function prefixAtCaret(state){
+ const pos=state.selection.main.head;
+ const from=Math.max(0,pos-64);
+ const before=state.doc.sliceString(from,pos);
+ const match=before.match(/([A-Za-z_][A-Za-z0-9_]*|@[A-Za-z_][A-Za-z0-9_]*)$/);
+ if(!match)return null;
+ return {prefix:match[1],from:pos-match[1].length,to:pos};
+}
+
 function inspectAtCursor(state){
  const {word}=currentWord(state);
  if(vexFunctions[word])setInfo(word+"()",vexFunctions[word][0],vexFunctions[word][1]);
@@ -354,18 +388,14 @@ function inspectAtCursor(state){
 }
 
 function updateSuggestions(state){
- const cur=currentWord(state);
- const word=cur.word;
- const pos=state.selection.main.head;
-
- // Only complete the token immediately before/under the caret.
- if(!word || word.length < 1 || pos < cur.from || pos > cur.to){
+ const hit=prefixAtCaret(state);
+ if(!hit || hit.prefix.length<2){
   suggestWrap.classList.remove("show");
   suggestionsEl.innerHTML="";
   return;
  }
 
- const lower=word.toLowerCase();
+ const lower=hit.prefix.toLowerCase();
  const pool=[
   ...Object.keys(vexFunctions).map(name=>({name,type:"function",detail:vexFunctions[name][0]})),
   ...Object.keys(attributes).map(name=>({name,type:"attribute",detail:attributes[name][0]})),
@@ -375,7 +405,7 @@ function updateSuggestions(state){
 
  const matches=pool
    .filter(x=>x.name.toLowerCase().startsWith(lower) && x.name.toLowerCase()!==lower)
-   .slice(0,8);
+   .slice(0,4);
 
  if(!matches.length){
   suggestWrap.classList.remove("show");
@@ -390,26 +420,28 @@ function updateSuggestions(state){
   b.className="suggestion";
   b.innerHTML=`<strong>${item.name}${item.type==="function"?"()":""}</strong><small>${item.detail}</small>`;
 
-  // Touching a candidate inserts it, then restores editor focus.
+  // Keep the iOS keyboard open while tapping a completion.
+  b.addEventListener("pointerdown",e=>e.preventDefault());
   b.addEventListener("click",()=>{
-   const now=currentWord(view.state);
+   const now=prefixAtCaret(view.state);
+   if(!now)return;
    const insert=item.type==="function" ? item.name+"(" : item.name;
    view.dispatch({
     changes:{from:now.from,to:now.to,insert},
-    selection:{anchor:now.from+insert.length}
+    selection:{anchor:now.from+insert.length},
+    scrollIntoView:true
    });
    suggestWrap.classList.remove("show");
    if(vexFunctions[item.name]){
     setInfo(item.name+"()",vexFunctions[item.name][0],vexFunctions[item.name][1]);
    }
-   requestAnimationFrame(()=>view.focus());
+   view.focus();
   });
 
   suggestionsEl.appendChild(b);
  }
  suggestWrap.classList.add("show");
 }
-
 function checkCode(text){
  const stack=[],pairs={")":"(","]":"[","}":"{"};
  let quote=false,escaped=false,line=false,block=false;
@@ -437,7 +469,7 @@ function checkCode(text){
  statusEl.textContent="✓ 기본 검사 통과";statusEl.className="status ok"
 }
 
-const initial=localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem("vex-pocket-code-v02") ?? localStorage.getItem("vex-pocket-code-v01") ?? defaultCode;
+const initial=localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem("vex-pocket-code-v03") ?? localStorage.getItem("vex-pocket-code-v02") ?? localStorage.getItem("vex-pocket-code-v01") ?? defaultCode;
 
 const view=new EditorView({
  state:EditorState.create({
@@ -489,14 +521,57 @@ if(window.visualViewport){
  visualViewport.addEventListener("scroll",syncViewport);
 }
 
+function moveVertical(dir){
+ const pos=view.state.selection.main.head;
+ const line=view.state.doc.lineAt(pos);
+ const column=pos-line.from;
+ const targetNo=Math.max(1,Math.min(view.state.doc.lines,line.number+dir));
+ const target=view.state.doc.line(targetNo);
+ const next=target.from+Math.min(column,target.length);
+ view.dispatch({selection:{anchor:next},scrollIntoView:true});
+ view.focus();
+}
+
 document.querySelectorAll(".key").forEach(btn=>{
+ // No scrolling toolbar anymore, so preventing pointerdown is safe and keeps iOS keyboard open.
+ btn.addEventListener("pointerdown",e=>e.preventDefault());
  btn.addEventListener("click",()=>{
-  const insert=btn.dataset.insert;
+  const action=btn.dataset.action;
   const sel=view.state.selection.main;
-  const shift=Number(btn.dataset.cursor||0);
-  const next=sel.from+insert.length+shift;
-  view.dispatch({changes:{from:sel.from,to:sel.to,insert},selection:{anchor:next}});
-  view.focus()
+
+  if(action==="tab"){
+   const insert="    ";
+   view.dispatch({
+    changes:{from:sel.from,to:sel.to,insert},
+    selection:{anchor:sel.from+insert.length},
+    scrollIntoView:true
+   });
+   view.focus();
+   return;
+  }
+
+  if(action==="left" || action==="right"){
+   const delta=action==="left"?-1:1;
+   const next=Math.max(0,Math.min(view.state.doc.length,sel.head+delta));
+   view.dispatch({selection:{anchor:next},scrollIntoView:true});
+   view.focus();
+   return;
+  }
+
+  if(action==="up"){moveVertical(-1);return;}
+  if(action==="down"){moveVertical(1);return;}
+
+  const insert=btn.dataset.insert;
+  if(insert!==undefined){
+   const shift=Number(btn.dataset.cursor||0);
+   const next=sel.from+insert.length+shift;
+   view.dispatch({
+    changes:{from:sel.from,to:sel.to,insert},
+    selection:{anchor:next},
+    scrollIntoView:true
+   });
+   view.focus();
+  }
  })
 });
 
