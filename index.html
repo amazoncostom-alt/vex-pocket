@@ -27,11 +27,22 @@
 *{box-sizing:border-box}
 html,body{
   margin:0;width:100%;height:100%;overflow:hidden;
+  overscroll-behavior:none;
   background:var(--bg);color:var(--text);
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif
 }
+body{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  touch-action:none;
+}
 button{font:inherit;color:inherit}
 .app{
+  position:fixed;
+  left:0;right:0;
+  top:var(--app-top,0px);
   height:var(--app-h);
   display:grid;
   grid-template-rows:auto minmax(0,1fr) auto auto;
@@ -59,14 +70,14 @@ header{
 
 /* Editor */
 .editor-shell{
-  min-height:0;display:grid;grid-template-columns:auto minmax(0,1fr);
-  overflow:hidden;background:var(--bg)
+  min-height:0;display:grid;grid-template-columns:30px minmax(0,1fr);
+  overflow:hidden;background:var(--bg);touch-action:none
 }
 .gutter{
-  min-width:42px;padding:10px 8px 30px 0;
+  width:30px;min-width:30px;padding:10px 5px 30px 0;
   text-align:right;background:#0d1014;border-right:1px solid var(--line);
-  color:#596675;font:14px/1.58 "SFMono-Regular",Menlo,monospace;
-  overflow:hidden;user-select:none
+  color:#4d5965;font:12px/1.84 "SFMono-Regular",Menlo,monospace;
+  overflow:hidden;user-select:none;pointer-events:none
 }
 .editor-stack{
   position:relative;min-width:0;min-height:0;overflow:hidden
@@ -88,6 +99,10 @@ header{
   color:transparent;
   caret-color:var(--accent);
   -webkit-text-fill-color:transparent;
+  overflow:auto;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+  touch-action:pan-y;
   spellcheck:false;
 }
 .editor::selection{background:rgba(121,184,255,.25)}
@@ -113,8 +128,11 @@ header{
 .completion.show{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
 .comp-btn{
   min-width:0;border:1px solid #33404c;background:#19212a;
-  border-radius:8px;padding:6px 8px;text-align:left;
-  font:12px/1.25 "SFMono-Regular",Menlo,monospace
+  border-radius:8px;padding:8px 8px;text-align:left;
+  font:12px/1.25 "SFMono-Regular",Menlo,monospace;
+  touch-action:manipulation;
+  position:relative;
+  z-index:50;
 }
 .comp-btn strong{
   display:block;color:var(--fn);white-space:nowrap;
@@ -174,7 +192,7 @@ header{
       <div class="logo">V</div>
       <div>
         <div class="title">VEX Pocket</div>
-        <div class="subtitle">scratch.vex · v0.6 · no dependencies</div>
+        <div class="subtitle">scratch.vex · v0.7 · touch + scroll fix</div>
       </div>
     </div>
     <div class="actions">
@@ -194,7 +212,7 @@ header{
   <div class="completion" id="completion"></div>
 
   <section class="info">
-    <div class="info-title" id="infoTitle">VEX Pocket v0.6</div>
+    <div class="info-title" id="infoTitle">VEX Pocket v0.7</div>
     <div class="info-signature" id="infoSignature">순수 HTML/CSS/JS 에디터</div>
     <div class="info-desc" id="infoDesc">VEX 함수는 노란색, attribute는 파란색으로 표시합니다.</div>
   </section>
@@ -215,7 +233,7 @@ header{
 </div>
 
 <script>
-const STORAGE_KEY="vex-pocket-code-v06";
+const STORAGE_KEY="vex-pocket-code-v07";
 const editor=document.getElementById("editor");
 const highlight=document.getElementById("highlight");
 const gutter=document.getElementById("gutter");
@@ -406,16 +424,20 @@ function updateCompletion(){
     b.type="button";
     b.innerHTML="<strong>"+name+"()</strong><span>"+VEX_FUNCTIONS[name][0]+"</span>";
 
-    b.addEventListener("touchstart",e=>e.preventDefault(),{passive:false});
-    b.addEventListener("mousedown",e=>e.preventDefault());
-
-    b.addEventListener("click",()=>{
+    const choose=()=>{
       const now=currentPrefix();
       if(!now)return;
       editor.setRangeText(name+"(",now.from,now.to,"end");
       updateAll();
       showInfo(name);
-      editor.focus();
+      requestAnimationFrame(()=>editor.focus());
+    };
+
+    // iPhone Safari: execute directly on pointerdown instead of
+    // depending on the synthetic click generated after touch.
+    b.addEventListener("pointerdown",e=>{
+      e.preventDefault();
+      choose();
     });
 
     completion.appendChild(b);
@@ -496,10 +518,9 @@ function moveVertical(delta){
 }
 
 document.querySelectorAll(".key").forEach(btn=>{
-  btn.addEventListener("touchstart",e=>e.preventDefault(),{passive:false});
-  btn.addEventListener("mousedown",e=>e.preventDefault());
+  btn.addEventListener("pointerdown",e=>{
+    e.preventDefault();
 
-  btn.addEventListener("click",()=>{
     const action=btn.dataset.action;
     if(action==="tab"){insertText("    ");return}
     if(action==="left"){moveHorizontal(-1);return}
@@ -537,8 +558,16 @@ document.getElementById("clearBtn").onclick=()=>{
 function syncViewport(){
   const vv=window.visualViewport;
   const h=vv?vv.height:window.innerHeight;
+  const top=vv?vv.offsetTop:0;
   document.documentElement.style.setProperty("--app-h",Math.round(h)+"px");
+  document.documentElement.style.setProperty("--app-top",Math.round(top)+"px");
 }
+document.addEventListener("touchmove",e=>{
+  if(e.target!==editor && !editor.contains(e.target)){
+    e.preventDefault();
+  }
+},{passive:false});
+
 window.addEventListener("resize",syncViewport);
 if(window.visualViewport){
   visualViewport.addEventListener("resize",syncViewport);
@@ -548,8 +577,8 @@ syncViewport();
 
 editor.value=
   localStorage.getItem(STORAGE_KEY) ??
-  localStorage.getItem("vex-pocket-code-v05") ??
-`// VEX Pocket v0.6
+  localStorage.getItem("vex-pocket-code-v06") ?? localStorage.getItem("vex-pocket-code-v05") ??
+`// VEX Pocket v0.7
 // near 를 입력해 자동완성을 확인하세요.
 
 vector center = getbbox_center(0);
