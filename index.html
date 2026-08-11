@@ -9,193 +9,548 @@
 :root{
   color-scheme:dark;
   --app-h:100dvh;
-  --bg:#0b0d10;--panel:#11151a;--panel2:#171c22;--line:#242b33;
-  --text:#e8edf2;--muted:#8e9aa7;--accent:#79b8ff;--fn:#ffd166;
-  --ok:#58d68d;--warn:#f5b642;--danger:#ff6b6b;
+  --bg:#0b0d10;
+  --panel:#11151a;
+  --panel2:#171c22;
+  --line:#242b33;
+  --text:#e8edf2;
+  --muted:#7f8b98;
+  --accent:#79b8ff;
+  --keyword:#c792ea;
+  --type:#82aaff;
+  --fn:#ffd166;
+  --string:#c3e88d;
+  --number:#f78c6c;
+  --comment:#63707d;
+  --attr:#82d9ff;
 }
 *{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif}
+html,body{
+  margin:0;width:100%;height:100%;overflow:hidden;
+  background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif
+}
 button{font:inherit;color:inherit}
-.app{height:var(--app-h);display:grid;grid-template-rows:auto minmax(0,1fr) auto auto;background:var(--bg);padding-top:env(safe-area-inset-top)}
-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--line);background:rgba(11,13,16,.96);backdrop-filter:blur(16px);z-index:5}
-.brand{display:flex;align-items:center;gap:10px;min-width:0}
-.logo{width:30px;height:30px;border-radius:9px;background:linear-gradient(145deg,#79b8ff,#9b7cff);display:grid;place-items:center;font-weight:800;color:#08101a;flex:0 0 auto}
-.title{font-size:16px;font-weight:700}
+.app{
+  height:var(--app-h);
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr) auto auto;
+  background:var(--bg);
+  padding-top:env(safe-area-inset-top)
+}
+header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:9px 12px;border-bottom:1px solid var(--line);
+  background:rgba(11,13,16,.96);backdrop-filter:blur(14px)
+}
+.brand{display:flex;align-items:center;gap:9px}
+.logo{
+  width:29px;height:29px;border-radius:8px;
+  background:linear-gradient(145deg,#79b8ff,#9b7cff);
+  color:#08101a;display:grid;place-items:center;font-weight:800
+}
+.title{font-size:15px;font-weight:700}
 .subtitle{font-size:11px;color:var(--muted);margin-top:1px}
-.actions{display:flex;gap:8px}
-.icon-btn{border:1px solid var(--line);background:var(--panel2);border-radius:10px;min-width:38px;height:38px;padding:0 10px}
-#editor{min-height:0;overflow:hidden}
-.cm-editor{height:100%;background:var(--bg);font-size:16px}
-.cm-scroller{font-family:"SFMono-Regular",Menlo,Consolas,monospace;line-height:1.58;overscroll-behavior:contain}
-.cm-content{padding:10px 0 30px;caret-color:var(--accent)!important}
-.cm-line{padding:0 10px}
-.cm-gutters{background:#0d1014!important;border-right:1px solid var(--line)!important;color:#596675!important}
-.cm-activeLine,.cm-activeLineGutter{background:rgba(121,184,255,.055)!important}
-.cm-cursor,.cm-dropCursor{border-left:2px solid var(--accent)!important;margin-left:-1px!important;visibility:visible!important}
-.cm-vex-function{color:var(--fn)!important;font-weight:650}
-.cm-vex-attribute{color:#82d9ff!important}
-.info{border-top:1px solid var(--line);background:var(--panel);max-height:124px;overflow:auto;padding:9px 14px}
-.app.keyboard .info{display:none}
-.info-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:4px}
-.fn-name{font-family:"SFMono-Regular",Menlo,monospace;font-size:13px;font-weight:700;color:var(--fn);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.status{font-size:11px;border:1px solid var(--line);border-radius:999px;padding:3px 8px;color:var(--muted);white-space:nowrap}
-.status.ok{color:var(--ok)}.status.warn{color:var(--warn)}.status.bad{color:var(--danger)}
-.signature{font-family:"SFMono-Regular",Menlo,monospace;font-size:12px;color:#c8d4df;white-space:pre-wrap;overflow-wrap:anywhere}
-.desc{font-size:12px;color:var(--muted);line-height:1.42;margin-top:4px}
-.bottom{background:#0d1014;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);z-index:20}
-.keys{display:grid;grid-template-columns:1.15fr repeat(4,1fr) repeat(4,1fr);gap:5px;padding:6px 7px}
-.key{min-width:0;border:1px solid #303842;background:#1a2027;border-radius:8px;height:36px;padding:0 4px;font-family:"SFMono-Regular",Menlo,monospace;font-size:14px;font-weight:700;touch-action:manipulation}
-.key.nav{font-size:18px}.key.tab{color:var(--accent)}
-.keyboard-tools{display:none;align-items:center;justify-content:space-between;padding:0 9px 7px;color:var(--muted);font-size:11px}
-.app.keyboard .keyboard-tools{display:flex}
-.done{border:1px solid #34404c;background:#1b232c;border-radius:8px;height:31px;padding:0 12px;color:var(--accent);font-weight:700}
+.actions{display:flex;gap:7px}
+.icon-btn{
+  border:1px solid var(--line);background:var(--panel2);
+  border-radius:9px;height:36px;padding:0 10px
+}
+
+/* Editor */
+.editor-shell{
+  min-height:0;display:grid;grid-template-columns:auto minmax(0,1fr);
+  overflow:hidden;background:var(--bg)
+}
+.gutter{
+  min-width:42px;padding:10px 8px 30px 0;
+  text-align:right;background:#0d1014;border-right:1px solid var(--line);
+  color:#596675;font:14px/1.58 "SFMono-Regular",Menlo,monospace;
+  overflow:hidden;user-select:none
+}
+.editor-stack{
+  position:relative;min-width:0;min-height:0;overflow:hidden
+}
+.highlight,.editor{
+  position:absolute;inset:0;margin:0;
+  padding:10px 12px 30px;
+  overflow:auto;white-space:pre-wrap;overflow-wrap:break-word;
+  tab-size:4;
+  font:16px/1.58 "SFMono-Regular",Menlo,Consolas,monospace;
+}
+.highlight{
+  pointer-events:none;color:var(--text);background:transparent;
+  scrollbar-width:none
+}
+.highlight::-webkit-scrollbar{display:none}
+.editor{
+  resize:none;border:0;outline:0;background:transparent;
+  color:transparent;
+  caret-color:var(--accent);
+  -webkit-text-fill-color:transparent;
+  spellcheck:false;
+}
+.editor::selection{background:rgba(121,184,255,.25)}
+.editor:focus{outline:none}
+
+/* Syntax */
+.tok-keyword{color:var(--keyword)}
+.tok-type{color:var(--type)}
+.tok-fn{color:var(--fn);font-weight:650}
+.tok-string{color:var(--string)}
+.tok-number{color:var(--number)}
+.tok-comment{color:var(--comment);font-style:italic}
+.tok-attr{color:var(--attr)}
+.tok-preproc{color:#f07178}
+
+/* Completion */
+.completion{
+  display:none;
+  border-top:1px solid var(--line);
+  background:#0f141a;
+  padding:5px 7px
+}
+.completion.show{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
+.comp-btn{
+  min-width:0;border:1px solid #33404c;background:#19212a;
+  border-radius:8px;padding:6px 8px;text-align:left;
+  font:12px/1.25 "SFMono-Regular",Menlo,monospace
+}
+.comp-btn strong{
+  display:block;color:var(--fn);white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis
+}
+.comp-btn span{
+  display:block;color:var(--muted);font-size:10px;margin-top:2px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+}
+
+/* Info */
+.info{
+  border-top:1px solid var(--line);background:var(--panel);
+  padding:8px 12px;max-height:116px;overflow:auto
+}
+.info-title{font:700 13px "SFMono-Regular",Menlo,monospace;color:var(--fn)}
+.info-signature{font:12px/1.35 "SFMono-Regular",Menlo,monospace;color:#c8d4df;margin-top:3px}
+.info-desc{font-size:11px;line-height:1.4;color:var(--muted);margin-top:3px}
+
+/* Toolbar */
+.bottom{
+  border-top:1px solid var(--line);background:#0d1014;
+  padding-bottom:env(safe-area-inset-bottom)
+}
+.keys{
+  display:grid;grid-template-columns:1.15fr repeat(4,1fr) repeat(4,1fr);
+  gap:5px;padding:6px 7px
+}
+.key{
+  min-width:0;height:36px;border:1px solid #303842;
+  background:#1a2027;border-radius:8px;
+  font:700 14px "SFMono-Regular",Menlo,monospace;
+  padding:0 3px
+}
+.key.tab{color:var(--accent)}
+.key.nav{font-size:18px}
+
 @media (orientation:landscape) and (max-height:520px){
-  header{padding:5px 10px}.logo{width:26px;height:26px}.title{font-size:14px}.subtitle{display:none}
-  .icon-btn{height:30px;min-width:34px;padding:0 8px;font-size:12px}.info{display:none!important}
-  .cm-editor{font-size:14px}.keys{padding:4px 6px;gap:4px}.key{height:31px;font-size:12px}.key.nav{font-size:16px}
+  header{padding:5px 8px}
+  .logo{width:25px;height:25px}
+  .title{font-size:13px}
+  .subtitle{display:none}
+  .icon-btn{height:29px;font-size:12px}
+  .info{display:none}
+  .highlight,.editor{font-size:14px;padding-top:6px;padding-bottom:12px}
+  .gutter{font-size:13px;padding-top:6px;padding-bottom:12px}
+  .keys{padding:4px 5px;gap:4px}
+  .key{height:30px;font-size:12px}
+  .key.nav{font-size:16px}
 }
 </style>
 </head>
 <body>
 <div class="app" id="app">
-<header>
-  <div class="brand">
-    <div class="logo">V</div>
-    <div><div class="title">VEX Pocket</div><div class="subtitle">scratch.vex · v0.5 · C++ parser</div></div>
-  </div>
-  <div class="actions">
-    <button class="icon-btn" id="sampleBtn">예제</button>
-    <button class="icon-btn" id="clearBtn">새로</button>
-  </div>
-</header>
+  <header>
+    <div class="brand">
+      <div class="logo">V</div>
+      <div>
+        <div class="title">VEX Pocket</div>
+        <div class="subtitle">scratch.vex · v0.6 · no dependencies</div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="icon-btn" id="sampleBtn">예제</button>
+      <button class="icon-btn" id="clearBtn">새로</button>
+    </div>
+  </header>
 
-<main id="editor"></main>
-
-<section class="info">
-  <div class="info-top">
-    <div class="fn-name" id="fnName">VEX Pocket v0.5</div>
-    <div class="status ok" id="status">✓ editor ready</div>
+  <div class="editor-shell">
+    <div class="gutter" id="gutter">1</div>
+    <div class="editor-stack">
+      <pre class="highlight" id="highlight"></pre>
+      <textarea class="editor" id="editor" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"></textarea>
+    </div>
   </div>
-  <div class="signature" id="signature">C++ parser + VEX completion</div>
-  <div class="desc" id="description">VEX 함수는 노란색, attribute는 파란색으로 표시합니다.</div>
-</section>
 
-<div class="bottom">
-  <nav class="keys">
-    <button class="key tab" data-action="tab">⇥ Tab</button>
-    <button class="key nav" data-action="left">←</button>
-    <button class="key nav" data-action="up">↑</button>
-    <button class="key nav" data-action="down">↓</button>
-    <button class="key nav" data-action="right">→</button>
-    <button class="key" data-insert="{}" data-cursor="-1">{ }</button>
-    <button class="key" data-insert="[]" data-cursor="-1">[ ]</button>
-    <button class="key" data-insert="()" data-cursor="-1">( )</button>
-    <button class="key" data-insert=";">;</button>
-  </nav>
-  <div class="keyboard-tools">
-    <span>VEX Quick Keys</span>
-    <button class="done" id="doneBtn">완료</button>
+  <div class="completion" id="completion"></div>
+
+  <section class="info">
+    <div class="info-title" id="infoTitle">VEX Pocket v0.6</div>
+    <div class="info-signature" id="infoSignature">순수 HTML/CSS/JS 에디터</div>
+    <div class="info-desc" id="infoDesc">VEX 함수는 노란색, attribute는 파란색으로 표시합니다.</div>
+  </section>
+
+  <div class="bottom">
+    <nav class="keys">
+      <button class="key tab" data-action="tab">⇥ Tab</button>
+      <button class="key nav" data-action="left">←</button>
+      <button class="key nav" data-action="up">↑</button>
+      <button class="key nav" data-action="down">↓</button>
+      <button class="key nav" data-action="right">→</button>
+      <button class="key" data-insert="{}" data-cursor="-1">{ }</button>
+      <button class="key" data-insert="[]" data-cursor="-1">[ ]</button>
+      <button class="key" data-insert="()" data-cursor="-1">( )</button>
+      <button class="key" data-insert=";">;</button>
+    </nav>
   </div>
 </div>
-</div>
 
-<script type="module">
-import {basicSetup} from "https://esm.sh/codemirror@6.0.1";
-import {EditorState, StateField} from "https://esm.sh/@codemirror/state@6.5.2";
-import {EditorView, Decoration} from "https://esm.sh/@codemirror/view@6.39.15";
-import {cpp} from "https://esm.sh/@codemirror/lang-cpp@6.0.3";
-import {autocompletion} from "https://esm.sh/@codemirror/autocomplete@6.20.1";
-
-const STORAGE_KEY="vex-pocket-code-v05";
+<script>
+const STORAGE_KEY="vex-pocket-code-v06";
+const editor=document.getElementById("editor");
+const highlight=document.getElementById("highlight");
+const gutter=document.getElementById("gutter");
+const completion=document.getElementById("completion");
 const app=document.getElementById("app");
 
-const vexFunctions={
- point:["point(int geo, string attrib, int ptnum)","Point attribute 값을 읽습니다."],
- pointattrib:["pointattrib(int geo, string attrib, int ptnum, int &success)","Point attribute를 읽고 success도 반환합니다."],
- setpointattrib:['setpointattrib(int geo, string name, int ptnum, value, string mode="set")',"Point attribute를 수정합니다."],
- nearpoint:["nearpoint(int geo, vector pos [, float maxdist])","가장 가까운 point를 찾습니다."],
- nearpoints:["nearpoints(int geo, vector pos, float maxdist [, int maxpts])","주변 point들을 거리순으로 찾습니다."],
- pcfind:["pcfind(int geo, string Pchannel, vector P, float radius, int maxpoints)","반경 내 point들을 찾습니다."],
- prim:["prim(int geo, string attrib, int primnum)","Primitive attribute 값을 읽습니다."],
- detail:["detail(int geo, string attrib [, int ignored])","Detail attribute 값을 읽습니다."],
- normalize:["normalize(vector v)","벡터를 정규화합니다."],
- length:["length(vector v)","벡터 길이를 반환합니다."],
- distance:["distance(vector a, vector b)","두 위치 사이 거리를 반환합니다."],
- dot:["dot(vector a, vector b)","Dot product를 반환합니다."],
- cross:["cross(vector a, vector b)","Cross product를 반환합니다."],
- fit:["fit(float v,float omin,float omax,float nmin,float nmax)","값을 다른 범위로 remap합니다."],
- lerp:["lerp(a,b,bias)","두 값 사이를 보간합니다."],
- clamp:["clamp(v,min,max)","값을 범위 안으로 제한합니다."],
- rand:["rand(seed)","의사 난수를 반환합니다."],
- noise:["noise(pos)","Noise 값을 반환합니다."],
- chf:['chf(string name)',"Float parameter를 읽습니다."],
- chi:['chi(string name)',"Integer parameter를 읽습니다."],
- chv:['chv(string name)',"Vector parameter를 읽습니다."],
- chramp:['chramp(string name,float pos)',"Ramp 값을 샘플링합니다."],
- addpoint:["addpoint(int geo, vector pos)","Point를 추가합니다."],
- removepoint:["removepoint(int geo,int ptnum)","Point를 제거합니다."],
- addprim:["addprim(int geo,string type,...)","Primitive를 추가합니다."],
- len:["len(array_or_string)","배열/문자열 길이를 반환합니다."]
+const infoTitle=document.getElementById("infoTitle");
+const infoSignature=document.getElementById("infoSignature");
+const infoDesc=document.getElementById("infoDesc");
+
+const VEX_FUNCTIONS={
+  point:["point(int geo, string attrib, int ptnum)","Point attribute 값을 읽습니다."],
+  pointattrib:["pointattrib(int geo, string attrib, int ptnum, int &success)","Point attribute와 success를 읽습니다."],
+  setpointattrib:['setpointattrib(int geo, string name, int ptnum, value, string mode="set")',"Point attribute를 수정합니다."],
+  nearpoint:["nearpoint(int geo, vector pos [, float maxdist])","가장 가까운 point를 찾습니다."],
+  nearpoints:["nearpoints(int geo, vector pos, float maxdist [, int maxpts])","주변 point들을 거리순으로 찾습니다."],
+  pcfind:["pcfind(int geo, string Pchannel, vector P, float radius, int maxpoints)","반경 안의 point를 찾습니다."],
+  prim:["prim(int geo, string attrib, int primnum)","Primitive attribute를 읽습니다."],
+  primattrib:["primattrib(int geo, string attrib, int primnum, int &success)","Primitive attribute와 success를 읽습니다."],
+  detail:["detail(int geo, string attrib [, int ignored])","Detail attribute를 읽습니다."],
+  vertex:["vertex(int geo, string attrib, int vertexnum)","Vertex attribute를 읽습니다."],
+  normalize:["normalize(vector v)","벡터 길이를 1로 만듭니다."],
+  length:["length(vector v)","벡터 길이를 반환합니다."],
+  distance:["distance(vector a, vector b)","두 위치 사이 거리를 반환합니다."],
+  dot:["dot(vector a, vector b)","Dot product를 반환합니다."],
+  cross:["cross(vector a, vector b)","Cross product를 반환합니다."],
+  fit:["fit(float v,float omin,float omax,float nmin,float nmax)","값을 다른 범위로 remap합니다."],
+  fit01:["fit01(float v,float nmin,float nmax)","0-1 값을 다른 범위로 remap합니다."],
+  lerp:["lerp(a,b,bias)","두 값을 보간합니다."],
+  clamp:["clamp(v,min,max)","값을 범위 안으로 제한합니다."],
+  min:["min(a,b)","최솟값을 반환합니다."],
+  max:["max(a,b)","최댓값을 반환합니다."],
+  abs:["abs(x)","절댓값을 반환합니다."],
+  rand:["rand(seed)","의사 난수를 반환합니다."],
+  noise:["noise(pos)","Noise 값을 반환합니다."],
+  snoise:["snoise(pos)","Signed noise 값을 반환합니다."],
+  chf:['chf(string name)',"Float parameter를 읽습니다."],
+  chi:['chi(string name)',"Integer parameter를 읽습니다."],
+  chv:['chv(string name)',"Vector parameter를 읽습니다."],
+  chs:['chs(string name)',"String parameter를 읽습니다."],
+  chramp:['chramp(string name,float pos)',"Ramp parameter를 샘플링합니다."],
+  addpoint:["addpoint(int geo, vector pos)","Point를 추가합니다."],
+  removepoint:["removepoint(int geo,int ptnum)","Point를 제거합니다."],
+  addprim:["addprim(int geo,string type,...)","Primitive를 추가합니다."],
+  removeprim:["removeprim(int geo,int primnum,int andpoints)","Primitive를 제거합니다."],
+  len:["len(array_or_string)","배열/문자열 길이를 반환합니다."],
+  append:["append(array,value)","배열 뒤에 값을 추가합니다."],
+  push:["push(array,value)","배열 뒤에 값을 추가합니다."],
+  pop:["pop(array)","배열 마지막 값을 제거/반환합니다."],
+  sort:["sort(array)","배열을 정렬합니다."],
+  reverse:["reverse(array)","배열 순서를 뒤집습니다."],
+  getbbox_center:["getbbox_center(int geo)","Bounding box 중심을 반환합니다."]
 };
 
-const attributes={
- "@P":"vector @P","@Cd":"vector @Cd","@N":"vector @N","@ptnum":"int @ptnum",
- "@primnum":"int @primnum","@numpt":"int @numpt","@numprim":"int @numprim",
- "@Time":"float @Time","@Frame":"float @Frame"
-};
+const TYPES=new Set([
+  "void","int","float","vector","vector2","vector4","matrix","matrix2","matrix3",
+  "string","dict","struct"
+]);
 
-function vexCompletion(context){
-  const word=context.matchBefore(/(?:[A-Za-z_]\w*|@[A-Za-z_]\w*)/);
-  if(!word)return null;
-  if(word.from===word.to && !context.explicit)return null;
+const KEYWORDS=new Set([
+  "if","else","for","foreach","while","do","switch","case","default",
+  "break","continue","return","function","export","const"
+]);
 
-  const options=[
-    ...Object.entries(vexFunctions).map(([label,v])=>({
-      label,type:"function",detail:v[0],info:v[1],
-      apply(view,completion,from,to){
-        view.dispatch({
-          changes:{from,to,insert:label+"("},
-          selection:{anchor:from+label.length+1}
-        });
-      }
-    })),
-    ...Object.entries(attributes).map(([label,detail])=>({label,type:"variable",detail}))
-  ];
-
-  return {from:word.from,options,validFor:/(?:[A-Za-z_]\w*|@[A-Za-z_]\w*)/};
+function escapeHTML(s){
+  return s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
 }
 
-function buildDecorations(state){
-  const decos=[];
-  const text=state.doc.toString();
+function highlightCode(code){
+  let out="";
+  let i=0;
 
-  const fnRe=/\b([A-Za-z_]\w*)\s*(?=\()/g;
-  let m;
-  while((m=fnRe.exec(text))){
-    if(vexFunctions[m[1]]){
-      decos.push(Decoration.mark({class:"cm-vex-function"}).range(m.index,m.index+m[1].length));
+  while(i<code.length){
+    const c=code[i];
+    const n=code[i+1];
+
+    // line comment
+    if(c==="/" && n==="/"){
+      let j=i+2;
+      while(j<code.length && code[j]!="\n")j++;
+      out+='<span class="tok-comment">'+escapeHTML(code.slice(i,j))+'</span>';
+      i=j;continue;
     }
+
+    // block comment
+    if(c==="/" && n==="*"){
+      let j=i+2;
+      while(j<code.length-1 && !(code[j]==="*" && code[j+1]==="/"))j++;
+      j=Math.min(code.length,j+2);
+      out+='<span class="tok-comment">'+escapeHTML(code.slice(i,j))+'</span>';
+      i=j;continue;
+    }
+
+    // string
+    if(c==='"'){
+      let j=i+1,esc=false;
+      while(j<code.length){
+        const ch=code[j];
+        if(esc){esc=false;j++;continue}
+        if(ch==="\\"){esc=true;j++;continue}
+        if(ch==='"'){j++;break}
+        j++;
+      }
+      out+='<span class="tok-string">'+escapeHTML(code.slice(i,j))+'</span>';
+      i=j;continue;
+    }
+
+    // attribute
+    const attrMatch=code.slice(i).match(/^(?:[fvisp]|u)?@[A-Za-z_]\w*/);
+    if(attrMatch){
+      out+='<span class="tok-attr">'+escapeHTML(attrMatch[0])+'</span>';
+      i+=attrMatch[0].length;continue;
+    }
+
+    // number
+    const numMatch=code.slice(i).match(/^(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?/);
+    if(numMatch){
+      out+='<span class="tok-number">'+numMatch[0]+'</span>';
+      i+=numMatch[0].length;continue;
+    }
+
+    // identifier
+    const idMatch=code.slice(i).match(/^[A-Za-z_]\w*/);
+    if(idMatch){
+      const w=idMatch[0];
+      let cls="";
+      if(KEYWORDS.has(w))cls="tok-keyword";
+      else if(TYPES.has(w))cls="tok-type";
+      else{
+        let j=i+w.length;
+        while(j<code.length && /\s/.test(code[j]))j++;
+        if(code[j]==="(" && VEX_FUNCTIONS[w])cls="tok-fn";
+      }
+      out+=cls?'<span class="'+cls+'">'+w+'</span>':w;
+      i+=w.length;continue;
+    }
+
+    if(c==="#" && (i===0 || code[i-1]==="\n")){
+      let j=i;
+      while(j<code.length && code[j]!="\n")j++;
+      out+='<span class="tok-preproc">'+escapeHTML(code.slice(i,j))+'</span>';
+      i=j;continue;
+    }
+
+    out+=escapeHTML(c);
+    i++;
   }
 
-  const attrRe=/(?:[fvisp]|u)?@[A-Za-z_]\w*/g;
-  while((m=attrRe.exec(text))){
-    decos.push(Decoration.mark({class:"cm-vex-attribute"}).range(m.index,m.index+m[0].length));
-  }
-
-  return Decoration.set(decos,true);
+  return out+"\n";
 }
 
-const vexDecorations=StateField.define({
-  create:buildDecorations,
-  update(value,tr){
-    if(tr.docChanged)return buildDecorations(tr.state);
-    return value;
-  },
-  provide:f=>EditorView.decorations.from(f)
+function updateHighlight(){
+  highlight.innerHTML=highlightCode(editor.value);
+  gutter.textContent=Array.from({length:editor.value.split("\n").length},(_,i)=>i+1).join("\n");
+  syncScroll();
+}
+
+function syncScroll(){
+  highlight.scrollTop=editor.scrollTop;
+  highlight.scrollLeft=editor.scrollLeft;
+  gutter.scrollTop=editor.scrollTop;
+}
+
+function currentPrefix(){
+  const pos=editor.selectionStart;
+  const before=editor.value.slice(0,pos);
+  const m=before.match(/([A-Za-z_][A-Za-z0-9_]*)$/);
+  if(!m)return null;
+  return {text:m[1],from:pos-m[1].length,to:pos};
+}
+
+function updateCompletion(){
+  const hit=currentPrefix();
+  completion.innerHTML="";
+  completion.classList.remove("show");
+  if(!hit || hit.text.length<2)return;
+
+  const q=hit.text.toLowerCase();
+  const matches=Object.keys(VEX_FUNCTIONS)
+    .filter(name=>name.toLowerCase().startsWith(q) && name.toLowerCase()!==q)
+    .slice(0,4);
+
+  if(!matches.length)return;
+
+  for(const name of matches){
+    const b=document.createElement("button");
+    b.className="comp-btn";
+    b.type="button";
+    b.innerHTML="<strong>"+name+"()</strong><span>"+VEX_FUNCTIONS[name][0]+"</span>";
+
+    b.addEventListener("touchstart",e=>e.preventDefault(),{passive:false});
+    b.addEventListener("mousedown",e=>e.preventDefault());
+
+    b.addEventListener("click",()=>{
+      const now=currentPrefix();
+      if(!now)return;
+      editor.setRangeText(name+"(",now.from,now.to,"end");
+      updateAll();
+      showInfo(name);
+      editor.focus();
+    });
+
+    completion.appendChild(b);
+  }
+
+  completion.classList.add("show");
+}
+
+function showInfo(name){
+  if(!VEX_FUNCTIONS[name])return;
+  infoTitle.textContent=name+"()";
+  infoSignature.textContent=VEX_FUNCTIONS[name][0];
+  infoDesc.textContent=VEX_FUNCTIONS[name][1];
+}
+
+function inspectCaret(){
+  const pos=editor.selectionStart;
+  const text=editor.value;
+  let s=pos,e=pos;
+  while(s>0 && /[A-Za-z0-9_]/.test(text[s-1]))s--;
+  while(e<text.length && /[A-Za-z0-9_]/.test(text[e]))e++;
+  const word=text.slice(s,e);
+  if(VEX_FUNCTIONS[word])showInfo(word);
+}
+
+let saveTimer;
+function updateAll(){
+  updateHighlight();
+  updateCompletion();
+  inspectCaret();
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(()=>localStorage.setItem(STORAGE_KEY,editor.value),120);
+}
+
+editor.addEventListener("input",updateAll);
+editor.addEventListener("keyup",()=>{updateCompletion();inspectCaret()});
+editor.addEventListener("click",()=>{updateCompletion();inspectCaret()});
+editor.addEventListener("scroll",syncScroll);
+
+function insertText(text,cursorShift=0){
+  const start=editor.selectionStart;
+  const end=editor.selectionEnd;
+  editor.setRangeText(text,start,end,"end");
+  const pos=start+text.length+cursorShift;
+  editor.setSelectionRange(pos,pos);
+  updateAll();
+  editor.focus();
+}
+
+function moveHorizontal(delta){
+  const p=Math.max(0,Math.min(editor.value.length,editor.selectionStart+delta));
+  editor.setSelectionRange(p,p);
+  editor.focus();
+}
+
+function moveVertical(delta){
+  const p=editor.selectionStart;
+  const before=editor.value.slice(0,p);
+  const lineStart=before.lastIndexOf("\n")+1;
+  const col=p-lineStart;
+
+  if(delta<0){
+    if(lineStart===0)return;
+    const prevEnd=lineStart-1;
+    const prevStart=editor.value.lastIndexOf("\n",prevEnd-1)+1;
+    const next=prevStart+Math.min(col,prevEnd-prevStart);
+    editor.setSelectionRange(next,next);
+  }else{
+    const lineEnd=editor.value.indexOf("\n",p);
+    if(lineEnd<0)return;
+    const nextStart=lineEnd+1;
+    let nextEnd=editor.value.indexOf("\n",nextStart);
+    if(nextEnd<0)nextEnd=editor.value.length;
+    const next=nextStart+Math.min(col,nextEnd-nextStart);
+    editor.setSelectionRange(next,next);
+  }
+  editor.focus();
+}
+
+document.querySelectorAll(".key").forEach(btn=>{
+  btn.addEventListener("touchstart",e=>e.preventDefault(),{passive:false});
+  btn.addEventListener("mousedown",e=>e.preventDefault());
+
+  btn.addEventListener("click",()=>{
+    const action=btn.dataset.action;
+    if(action==="tab"){insertText("    ");return}
+    if(action==="left"){moveHorizontal(-1);return}
+    if(action==="right"){moveHorizontal(1);return}
+    if(action==="up"){moveVertical(-1);return}
+    if(action==="down"){moveVertical(1);return}
+
+    if(btn.dataset.insert!==undefined){
+      insertText(btn.dataset.insert,Number(btn.dataset.cursor||0));
+    }
+  });
 });
 
-const defaultCode=`// VEX Pocket v0.5
-// C++ syntax parser + VEX function completion
+document.getElementById("sampleBtn").onclick=()=>{
+  editor.value=`int pts[] = nearpoints(0, @P, chf("radius"));
+
+foreach (int pt; pts)
+{
+    vector p = point(0, "P", pt);
+    @Cd += p;
+}
+`;
+  editor.setSelectionRange(0,0);
+  updateAll();
+  editor.focus();
+};
+
+document.getElementById("clearBtn").onclick=()=>{
+  editor.value="// New VEX\n\n";
+  editor.setSelectionRange(editor.value.length,editor.value.length);
+  updateAll();
+  editor.focus();
+};
+
+function syncViewport(){
+  const vv=window.visualViewport;
+  const h=vv?vv.height:window.innerHeight;
+  document.documentElement.style.setProperty("--app-h",Math.round(h)+"px");
+}
+window.addEventListener("resize",syncViewport);
+if(window.visualViewport){
+  visualViewport.addEventListener("resize",syncViewport);
+  visualViewport.addEventListener("scroll",syncViewport);
+}
+syncViewport();
+
+editor.value=
+  localStorage.getItem(STORAGE_KEY) ??
+  localStorage.getItem("vex-pocket-code-v05") ??
+`// VEX Pocket v0.6
+// near 를 입력해 자동완성을 확인하세요.
 
 vector center = getbbox_center(0);
 vector dir = normalize(@P - center);
@@ -204,115 +559,7 @@ float amount = chf("amount");
 @P += dir * amount;
 `;
 
-const initial=
-  localStorage.getItem(STORAGE_KEY) ??
-  localStorage.getItem("vex-pocket-code-v04") ??
-  localStorage.getItem("vex-pocket-code-v03") ??
-  defaultCode;
-
-let saveTimer;
-
-const view=new EditorView({
-  state:EditorState.create({
-    doc:initial,
-    extensions:[
-      basicSetup,
-      cpp(),
-      vexDecorations,
-      autocompletion({
-        override:[vexCompletion],
-        activateOnTyping:true,
-        maxRenderedOptions:8
-      }),
-      EditorView.lineWrapping,
-      EditorView.updateListener.of(update=>{
-        if(update.docChanged){
-          clearTimeout(saveTimer);
-          saveTimer=setTimeout(()=>localStorage.setItem(STORAGE_KEY,update.state.doc.toString()),150);
-        }
-      }),
-      EditorView.theme({
-        "&":{backgroundColor:"#0b0d10",color:"#e8edf2"},
-        ".cm-content":{caretColor:"#79b8ff"},
-        ".cm-cursor":{borderLeftColor:"#79b8ff",borderLeftWidth:"2px"},
-        ".cm-tooltip":{backgroundColor:"#171c22",border:"1px solid #303842"},
-        ".cm-tooltip-autocomplete > ul > li[aria-selected]":{backgroundColor:"#253140",color:"#fff"}
-      },{dark:true})
-    ]
-  }),
-  parent:document.getElementById("editor")
-});
-
-function syncViewport(){
-  const vv=window.visualViewport;
-  const h=vv?vv.height:window.innerHeight;
-  document.documentElement.style.setProperty("--app-h",Math.round(h)+"px");
-  const keyboardOpen=vv?(window.innerHeight-vv.height>140):false;
-  app.classList.toggle("keyboard",keyboardOpen);
-}
-syncViewport();
-window.addEventListener("resize",syncViewport);
-if(window.visualViewport){
-  visualViewport.addEventListener("resize",syncViewport);
-  visualViewport.addEventListener("scroll",syncViewport);
-}
-
-function moveVertical(dir){
-  const pos=view.state.selection.main.head;
-  const line=view.state.doc.lineAt(pos);
-  const col=pos-line.from;
-  const targetNo=Math.max(1,Math.min(view.state.doc.lines,line.number+dir));
-  const target=view.state.doc.line(targetNo);
-  const next=target.from+Math.min(col,target.length);
-  view.dispatch({selection:{anchor:next},scrollIntoView:true});
-  view.focus();
-}
-
-document.querySelectorAll(".key").forEach(btn=>{
-  btn.addEventListener("pointerdown",e=>e.preventDefault());
-  btn.addEventListener("click",()=>{
-    const action=btn.dataset.action;
-    const sel=view.state.selection.main;
-    if(action==="tab"){
-      view.dispatch({changes:{from:sel.from,to:sel.to,insert:"    "},selection:{anchor:sel.from+4},scrollIntoView:true});
-      view.focus();return;
-    }
-    if(action==="left"||action==="right"){
-      const next=Math.max(0,Math.min(view.state.doc.length,sel.head+(action==="left"?-1:1)));
-      view.dispatch({selection:{anchor:next},scrollIntoView:true});view.focus();return;
-    }
-    if(action==="up"){moveVertical(-1);return}
-    if(action==="down"){moveVertical(1);return}
-    const insert=btn.dataset.insert;
-    if(insert!==undefined){
-      const shift=Number(btn.dataset.cursor||0);
-      const next=sel.from+insert.length+shift;
-      view.dispatch({changes:{from:sel.from,to:sel.to,insert},selection:{anchor:next},scrollIntoView:true});
-      view.focus();
-    }
-  });
-});
-
-document.getElementById("doneBtn").onclick=()=>view.contentDOM.blur();
-
-document.getElementById("sampleBtn").onclick=()=>{
-  const code=`int pts[] = nearpoints(0, @P, chf("radius"));
-
-foreach (int pt; pts)
-{
-    vector p = point(0, "P", pt);
-    @Cd += p;
-}
-`;
-  view.dispatch({changes:{from:0,to:view.state.doc.length,insert:code},selection:{anchor:0}});
-  view.focus();
-};
-
-document.getElementById("clearBtn").onclick=()=>{
-  const code="// New VEX\n\n";
-  view.dispatch({changes:{from:0,to:view.state.doc.length,insert:code},selection:{anchor:code.length}});
-  view.focus();
-};
+updateAll();
 </script>
 </body>
 </html>
