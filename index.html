@@ -70,7 +70,7 @@ header{
 /* Mobile autocomplete strip */
 .suggest-wrap{
   display:none;background:#0e1217;border-top:1px solid var(--line);
-  border-bottom:1px solid var(--line);padding:6px 8px;z-index:10
+  padding:6px 8px 0;z-index:10
 }
 .suggest-wrap.show{display:block}
 .suggestions{
@@ -115,14 +115,14 @@ header{
 }
 .keys{
   display:flex;gap:7px;overflow-x:auto;
-  padding:7px 8px;scrollbar-width:none;touch-action:pan-x
+  padding:7px 8px;scrollbar-width:none;touch-action:pan-x;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain
 }
 .keys::-webkit-scrollbar{display:none}
 .key{
   flex:0 0 auto;border:1px solid #303842;background:#1a2027;
   border-radius:9px;min-width:44px;height:38px;padding:0 11px;
   font-family:"SFMono-Regular",Menlo,monospace;font-size:13px;font-weight:600;
-  touch-action:manipulation
+  touch-action:pan-x
 }
 .key:active,.icon-btn:active,.suggestion:active{transform:scale(.97);background:#26303a}
 .keyboard-tools{
@@ -162,13 +162,9 @@ header{
 
   <main id="editor"></main>
 
-  <div class="suggest-wrap" id="suggestWrap">
-    <div class="suggestions" id="suggestions"></div>
-  </div>
-
   <section class="info" id="info">
     <div class="info-top">
-      <div class="fn-name" id="fnName">VEX Pocket v0.2</div>
+      <div class="fn-name" id="fnName">VEX Pocket v0.3</div>
       <div class="status ok" id="status">✓ 기본 검사 통과</div>
     </div>
     <div class="signature" id="signature">함수나 attribute 위에 커서를 놓으면 설명을 표시합니다.</div>
@@ -176,6 +172,9 @@ header{
   </section>
 
   <div class="bottom">
+    <div class="suggest-wrap" id="suggestWrap">
+      <div class="suggestions" id="suggestions"></div>
+    </div>
     <nav class="keys" aria-label="VEX 빠른 입력">
       <button class="key" data-insert="@P">@P</button>
       <button class="key" data-insert="@Cd">@Cd</button>
@@ -203,7 +202,7 @@ import { EditorView } from "https://esm.sh/@codemirror/view@6.38.1";
 import { StreamLanguage, syntaxHighlighting, HighlightStyle } from "https://esm.sh/@codemirror/language@6.11.2";
 import { tags } from "https://esm.sh/@lezer/highlight@1.2.1";
 
-const STORAGE_KEY="vex-pocket-code-v02";
+const STORAGE_KEY="vex-pocket-code-v03";
 const app=document.getElementById("app");
 const suggestWrap=document.getElementById("suggestWrap");
 const suggestionsEl=document.getElementById("suggestions");
@@ -295,8 +294,8 @@ const vexHighlight=HighlightStyle.define([
  {tag:tags.punctuation,color:"#aab5c0"}
 ]);
 
-const defaultCode=`// VEX Pocket v0.2
-// near 를 입력해 자동완성을 테스트해보세요.
+const defaultCode=`// VEX Pocket v0.3
+// near 를 입력하면 아래 자동완성 바가 나타납니다.
 
 vector center = getbbox_center(0);
 vector dir = normalize(@P - center);
@@ -355,11 +354,17 @@ function inspectAtCursor(state){
 }
 
 function updateSuggestions(state){
- const {word,from,to}=currentWord(state);
+ const cur=currentWord(state);
+ const word=cur.word;
  const pos=state.selection.main.head;
- if(pos!==to || !word || word.length<1){
-  suggestWrap.classList.remove("show");suggestionsEl.innerHTML="";return
+
+ // Only complete the token immediately before/under the caret.
+ if(!word || word.length < 1 || pos < cur.from || pos > cur.to){
+  suggestWrap.classList.remove("show");
+  suggestionsEl.innerHTML="";
+  return;
  }
+
  const lower=word.toLowerCase();
  const pool=[
   ...Object.keys(vexFunctions).map(name=>({name,type:"function",detail:vexFunctions[name][0]})),
@@ -367,28 +372,42 @@ function updateSuggestions(state){
   ...[...types].map(name=>({name,type:"type",detail:"VEX type"})),
   ...[...keywords].map(name=>({name,type:"keyword",detail:"VEX keyword"}))
  ];
- const matches=pool.filter(x=>x.name.toLowerCase().startsWith(lower)&&x.name!==word).slice(0,6);
- if(!matches.length){suggestWrap.classList.remove("show");suggestionsEl.innerHTML="";return}
+
+ const matches=pool
+   .filter(x=>x.name.toLowerCase().startsWith(lower) && x.name.toLowerCase()!==lower)
+   .slice(0,8);
+
+ if(!matches.length){
+  suggestWrap.classList.remove("show");
+  suggestionsEl.innerHTML="";
+  return;
+ }
+
  suggestionsEl.innerHTML="";
  for(const item of matches){
   const b=document.createElement("button");
+  b.type="button";
   b.className="suggestion";
   b.innerHTML=`<strong>${item.name}${item.type==="function"?"()":""}</strong><small>${item.detail}</small>`;
-  b.addEventListener("pointerdown",e=>e.preventDefault());
+
+  // Touching a candidate inserts it, then restores editor focus.
   b.addEventListener("click",()=>{
-   const cur=currentWord(view.state);
-   const insert=item.type==="function"?item.name+"(":item.name;
+   const now=currentWord(view.state);
+   const insert=item.type==="function" ? item.name+"(" : item.name;
    view.dispatch({
-    changes:{from:cur.from,to:cur.to,insert},
-    selection:{anchor:cur.from+insert.length}
+    changes:{from:now.from,to:now.to,insert},
+    selection:{anchor:now.from+insert.length}
    });
    suggestWrap.classList.remove("show");
-   if(vexFunctions[item.name])setInfo(item.name+"()",vexFunctions[item.name][0],vexFunctions[item.name][1]);
-   view.focus()
+   if(vexFunctions[item.name]){
+    setInfo(item.name+"()",vexFunctions[item.name][0],vexFunctions[item.name][1]);
+   }
+   requestAnimationFrame(()=>view.focus());
   });
-  suggestionsEl.appendChild(b)
+
+  suggestionsEl.appendChild(b);
  }
- suggestWrap.classList.add("show")
+ suggestWrap.classList.add("show");
 }
 
 function checkCode(text){
@@ -418,7 +437,7 @@ function checkCode(text){
  statusEl.textContent="✓ 기본 검사 통과";statusEl.className="status ok"
 }
 
-const initial=localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem("vex-pocket-code-v01") ?? defaultCode;
+const initial=localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem("vex-pocket-code-v02") ?? localStorage.getItem("vex-pocket-code-v01") ?? defaultCode;
 
 const view=new EditorView({
  state:EditorState.create({
@@ -471,7 +490,6 @@ if(window.visualViewport){
 }
 
 document.querySelectorAll(".key").forEach(btn=>{
- btn.addEventListener("pointerdown",e=>e.preventDefault());
  btn.addEventListener("click",()=>{
   const insert=btn.dataset.insert;
   const sel=view.state.selection.main;
