@@ -10,317 +10,192 @@
   color-scheme:dark;
   --app-h:100dvh;
   --bg:#0b0d10;--panel:#11151a;--panel2:#171c22;--line:#242b33;
-  --text:#e8edf2;--muted:#8e9aa7;--accent:#79b8ff;--ok:#58d68d;
-  --warn:#f5b642;--danger:#ff6b6b;
+  --text:#e8edf2;--muted:#8e9aa7;--accent:#79b8ff;--fn:#ffd166;
+  --ok:#58d68d;--warn:#f5b642;--danger:#ff6b6b;
 }
 *{box-sizing:border-box}
-html,body{
-  margin:0;width:100%;height:100%;overflow:hidden;
-  background:var(--bg);color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif
-}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif}
 button{font:inherit;color:inherit}
-.app{
-  height:var(--app-h);
-  display:grid;
-  grid-template-rows:auto minmax(0,1fr) auto auto;
-  background:var(--bg);
-  padding-top:env(safe-area-inset-top);
-}
-header{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:10px 14px;border-bottom:1px solid var(--line);
-  background:rgba(11,13,16,.96);backdrop-filter:blur(16px);z-index:5
-}
+.app{height:var(--app-h);display:grid;grid-template-rows:auto minmax(0,1fr) auto auto;background:var(--bg);padding-top:env(safe-area-inset-top)}
+header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--line);background:rgba(11,13,16,.96);backdrop-filter:blur(16px);z-index:5}
 .brand{display:flex;align-items:center;gap:10px;min-width:0}
-.logo{
-  width:30px;height:30px;border-radius:9px;
-  background:linear-gradient(145deg,#79b8ff,#9b7cff);
-  display:grid;place-items:center;font-weight:800;color:#08101a;flex:0 0 auto
-}
-.title{font-size:16px;font-weight:700;white-space:nowrap}
+.logo{width:30px;height:30px;border-radius:9px;background:linear-gradient(145deg,#79b8ff,#9b7cff);display:grid;place-items:center;font-weight:800;color:#08101a;flex:0 0 auto}
+.title{font-size:16px;font-weight:700}
 .subtitle{font-size:11px;color:var(--muted);margin-top:1px}
 .actions{display:flex;gap:8px}
-.icon-btn{
-  border:1px solid var(--line);background:var(--panel2);
-  border-radius:10px;min-width:38px;height:38px;padding:0 10px
-}
+.icon-btn{border:1px solid var(--line);background:var(--panel2);border-radius:10px;min-width:38px;height:38px;padding:0 10px}
 #editor{min-height:0;overflow:hidden}
 .cm-editor{height:100%;background:var(--bg);font-size:16px}
-.cm-scroller{
-  font-family:"SFMono-Regular",Menlo,Consolas,monospace;
-  line-height:1.58;overscroll-behavior:contain;
-}
+.cm-scroller{font-family:"SFMono-Regular",Menlo,Consolas,monospace;line-height:1.58;overscroll-behavior:contain}
 .cm-content{padding:10px 0 30px;caret-color:var(--accent)!important}
 .cm-line{padding:0 10px}
-.cm-gutters{
-  background:#0d1014!important;border-right:1px solid var(--line)!important;
-  color:#596675!important
-}
+.cm-gutters{background:#0d1014!important;border-right:1px solid var(--line)!important;color:#596675!important}
 .cm-activeLine,.cm-activeLineGutter{background:rgba(121,184,255,.055)!important}
-.cm-cursor,.cm-dropCursor{
-  border-left:2px solid var(--accent)!important;
-  margin-left:-1px!important;
-  visibility:visible!important;
-}
-.cm-focused .cm-cursor{animation:cursorBlink 1.05s steps(1) infinite}
-@keyframes cursorBlink{0%,48%{opacity:1}49%,100%{opacity:0}}
-.cm-selectionBackground{background:rgba(121,184,255,.23)!important}
-
-/* Mobile autocomplete strip */
-.suggest-wrap{
-  display:none;background:#0e1217;border-top:1px solid var(--line);
-  padding:6px 8px 0;z-index:10
-}
-.suggest-wrap.show{display:block}
-.suggestions{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:5px;
-}
-.suggestion{
-  min-width:0;border:1px solid #34404c;background:#1a222b;
-  border-radius:8px;padding:6px 8px;text-align:left;
-  font-family:"SFMono-Regular",Menlo,monospace;font-size:11px
-}
-.suggestion strong{
-  display:block;color:#dbe8f5;font-size:12px;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis
-}
-.suggestion small{
-  display:block;color:var(--muted);margin-top:2px;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis
-}
-
-.info{
-  border-top:1px solid var(--line);background:var(--panel);
-  max-height:132px;overflow:auto;padding:9px 14px;transition:.15s ease
-}
+.cm-cursor,.cm-dropCursor{border-left:2px solid var(--accent)!important;margin-left:-1px!important;visibility:visible!important}
+.cm-vex-function{color:var(--fn)!important;font-weight:650}
+.cm-vex-attribute{color:#82d9ff!important}
+.info{border-top:1px solid var(--line);background:var(--panel);max-height:124px;overflow:auto;padding:9px 14px}
 .app.keyboard .info{display:none}
 .info-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:4px}
-.fn-name{
-  font-family:"SFMono-Regular",Menlo,monospace;font-size:13px;font-weight:700;
-  color:var(--accent);overflow:hidden;text-overflow:ellipsis;white-space:nowrap
-}
-.status{
-  font-size:11px;border:1px solid var(--line);border-radius:999px;
-  padding:3px 8px;color:var(--muted);white-space:nowrap
-}
+.fn-name{font-family:"SFMono-Regular",Menlo,monospace;font-size:13px;font-weight:700;color:var(--fn);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.status{font-size:11px;border:1px solid var(--line);border-radius:999px;padding:3px 8px;color:var(--muted);white-space:nowrap}
 .status.ok{color:var(--ok)}.status.warn{color:var(--warn)}.status.bad{color:var(--danger)}
-.signature{
-  font-family:"SFMono-Regular",Menlo,monospace;font-size:12px;
-  color:#c8d4df;white-space:pre-wrap;overflow-wrap:anywhere
-}
+.signature{font-family:"SFMono-Regular",Menlo,monospace;font-size:12px;color:#c8d4df;white-space:pre-wrap;overflow-wrap:anywhere}
 .desc{font-size:12px;color:var(--muted);line-height:1.42;margin-top:4px}
-
-.bottom{
-  background:#0d1014;border-top:1px solid var(--line);
-  padding-bottom:env(safe-area-inset-bottom);z-index:20
-}
-.keys{
-  display:grid;
-  grid-template-columns:1.15fr repeat(4,1fr) repeat(4,1fr);
-  gap:5px;
-  padding:6px 7px;
-}
-.key{
-  min-width:0;border:1px solid #303842;background:#1a2027;
-  border-radius:8px;height:36px;padding:0 4px;
-  font-family:"SFMono-Regular",Menlo,monospace;font-size:14px;font-weight:700;
-  touch-action:manipulation;
-}
-.key.nav{font-size:18px}
-.key.tab{color:var(--accent)}
-
-.key:active,.icon-btn:active,.suggestion:active{transform:scale(.97);background:#26303a}
-.keyboard-tools{
-  display:none;align-items:center;justify-content:space-between;
-  padding:0 9px 7px;color:var(--muted);font-size:11px
-}
+.bottom{background:#0d1014;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);z-index:20}
+.keys{display:grid;grid-template-columns:1.15fr repeat(4,1fr) repeat(4,1fr);gap:5px;padding:6px 7px}
+.key{min-width:0;border:1px solid #303842;background:#1a2027;border-radius:8px;height:36px;padding:0 4px;font-family:"SFMono-Regular",Menlo,monospace;font-size:14px;font-weight:700;touch-action:manipulation}
+.key.nav{font-size:18px}.key.tab{color:var(--accent)}
+.keyboard-tools{display:none;align-items:center;justify-content:space-between;padding:0 9px 7px;color:var(--muted);font-size:11px}
 .app.keyboard .keyboard-tools{display:flex}
-.done{
-  border:1px solid #34404c;background:#1b232c;border-radius:8px;
-  height:31px;padding:0 12px;color:var(--accent);font-weight:700
-}
-.toast{
-  position:fixed;left:50%;top:calc(12px + env(safe-area-inset-top));
-  transform:translate(-50%,-12px);opacity:0;pointer-events:none;z-index:99;
-  background:#20262d;border:1px solid #343d47;border-radius:999px;
-  padding:8px 12px;font-size:12px;transition:.18s ease
-}
-.toast.show{opacity:1;transform:translate(-50%,0)}
-
+.done{border:1px solid #34404c;background:#1b232c;border-radius:8px;height:31px;padding:0 12px;color:var(--accent);font-weight:700}
 @media (orientation:landscape) and (max-height:520px){
-  header{padding:5px 10px}
-  .logo{width:26px;height:26px;border-radius:7px}
-  .title{font-size:14px}
-  .subtitle{display:none}
-  .icon-btn{height:30px;min-width:34px;padding:0 8px;font-size:12px}
-  .info{display:none!important}
-  .cm-editor{font-size:14px}
-  .cm-content{padding-top:6px;padding-bottom:12px}
-  .keys{padding:4px 6px;gap:4px}
-  .key{height:31px;font-size:12px}
-  .key.nav{font-size:16px}
-  .suggest-wrap{padding:4px 6px 0}
-  .suggestion{padding:4px 6px}
-  .keyboard-tools{padding:0 7px 4px}
+  header{padding:5px 10px}.logo{width:26px;height:26px}.title{font-size:14px}.subtitle{display:none}
+  .icon-btn{height:30px;min-width:34px;padding:0 8px;font-size:12px}.info{display:none!important}
+  .cm-editor{font-size:14px}.keys{padding:4px 6px;gap:4px}.key{height:31px;font-size:12px}.key.nav{font-size:16px}
 }
-
-@media (min-width:800px){.app{max-width:900px;margin:auto;border-left:1px solid var(--line);border-right:1px solid var(--line)}}
 </style>
 </head>
 <body>
 <div class="app" id="app">
-  <header>
-    <div class="brand">
-      <div class="logo">V</div>
-      <div>
-        <div class="title">VEX Pocket</div>
-        <div class="subtitle">scratch.vex · v0.4 · 자동 저장</div>
-      </div>
-    </div>
-    <div class="actions">
-      <button class="icon-btn" id="sampleBtn">예제</button>
-      <button class="icon-btn" id="clearBtn">새로</button>
-    </div>
-  </header>
+<header>
+  <div class="brand">
+    <div class="logo">V</div>
+    <div><div class="title">VEX Pocket</div><div class="subtitle">scratch.vex · v0.5 · C++ parser</div></div>
+  </div>
+  <div class="actions">
+    <button class="icon-btn" id="sampleBtn">예제</button>
+    <button class="icon-btn" id="clearBtn">새로</button>
+  </div>
+</header>
 
-  <main id="editor"></main>
+<main id="editor"></main>
 
-  <section class="info" id="info">
-    <div class="info-top">
-      <div class="fn-name" id="fnName">VEX Pocket v0.4</div>
-      <div class="status ok" id="status">✓ 기본 검사 통과</div>
-    </div>
-    <div class="signature" id="signature">함수나 attribute 위에 커서를 놓으면 설명을 표시합니다.</div>
-    <div class="desc" id="description">자동완성은 입력 중 키보드 바로 위에 표시됩니다.</div>
-  </section>
+<section class="info">
+  <div class="info-top">
+    <div class="fn-name" id="fnName">VEX Pocket v0.5</div>
+    <div class="status ok" id="status">✓ editor ready</div>
+  </div>
+  <div class="signature" id="signature">C++ parser + VEX completion</div>
+  <div class="desc" id="description">VEX 함수는 노란색, attribute는 파란색으로 표시합니다.</div>
+</section>
 
-  <div class="bottom">
-    <div class="suggest-wrap" id="suggestWrap">
-      <div class="suggestions" id="suggestions"></div>
-    </div>
-    <nav class="keys" aria-label="VEX 빠른 입력">
-      <button class="key tab" data-action="tab">⇥ Tab</button>
-      <button class="key nav" data-action="left">←</button>
-      <button class="key nav" data-action="up">↑</button>
-      <button class="key nav" data-action="down">↓</button>
-      <button class="key nav" data-action="right">→</button>
-      <button class="key" data-insert="{}" data-cursor="-1">{ }</button>
-      <button class="key" data-insert="[]" data-cursor="-1">[ ]</button>
-      <button class="key" data-insert="()" data-cursor="-1">( )</button>
-      <button class="key" data-insert=";">;</button>
-    </nav>
-    <div class="keyboard-tools">
-      <span>VEX Quick Keys</span>
-      <button class="done" id="doneBtn">완료</button>
-    </div>
+<div class="bottom">
+  <nav class="keys">
+    <button class="key tab" data-action="tab">⇥ Tab</button>
+    <button class="key nav" data-action="left">←</button>
+    <button class="key nav" data-action="up">↑</button>
+    <button class="key nav" data-action="down">↓</button>
+    <button class="key nav" data-action="right">→</button>
+    <button class="key" data-insert="{}" data-cursor="-1">{ }</button>
+    <button class="key" data-insert="[]" data-cursor="-1">[ ]</button>
+    <button class="key" data-insert="()" data-cursor="-1">( )</button>
+    <button class="key" data-insert=";">;</button>
+  </nav>
+  <div class="keyboard-tools">
+    <span>VEX Quick Keys</span>
+    <button class="done" id="doneBtn">완료</button>
   </div>
 </div>
-<div class="toast" id="toast"></div>
+</div>
 
 <script type="module">
-import { basicSetup } from "https://esm.sh/codemirror@6.0.1";
-import { EditorState } from "https://esm.sh/@codemirror/state@6.5.2";
-import { EditorView } from "https://esm.sh/@codemirror/view@6.38.1";
-import { StreamLanguage, syntaxHighlighting, HighlightStyle } from "https://esm.sh/@codemirror/language@6.11.2";
-import { tags } from "https://esm.sh/@lezer/highlight@1.2.1";
+import {basicSetup} from "https://esm.sh/codemirror@6.0.1";
+import {EditorState, StateField} from "https://esm.sh/@codemirror/state@6.5.2";
+import {EditorView, Decoration} from "https://esm.sh/@codemirror/view@6.39.15";
+import {cpp} from "https://esm.sh/@codemirror/lang-cpp@6.0.3";
+import {autocompletion} from "https://esm.sh/@codemirror/autocomplete@6.20.1";
 
-const STORAGE_KEY="vex-pocket-code-v04";
+const STORAGE_KEY="vex-pocket-code-v05";
 const app=document.getElementById("app");
-const suggestWrap=document.getElementById("suggestWrap");
-const suggestionsEl=document.getElementById("suggestions");
 
 const vexFunctions={
- point:["point(int geohandle, string attribute, int point_number)","지정한 point의 attribute 값을 읽습니다."],
- pointattrib:["pointattrib(int geohandle, string attribute, int point_number, int &success)","point attribute를 읽고 성공 여부도 함께 확인합니다."],
- setpointattrib:['setpointattrib(int geohandle, string name, int point_num, value, string mode="set")',"point attribute 값을 쓰거나 수정합니다."],
- nearpoint:["nearpoint(int geometry, vector pt [, float maxdist])","가장 가까운 point 번호를 반환합니다."],
- nearpoints:["nearpoints(int geometry, vector pt, float maxdist [, int maxpts])","주변 point들을 가까운 순서대로 반환합니다."],
- pcfind:["pcfind(int geometry, string Pchannel, vector P, float radius, int maxpoints)","반경 안의 point 번호 배열을 반환합니다."],
- prim:["prim(int geohandle, string attribute, int prim_number)","primitive attribute 값을 읽습니다."],
- vertex:["vertex(int geohandle, string attribute, int vertex_number)","vertex attribute 값을 읽습니다."],
- detail:["detail(int geohandle, string attribute [, int ignored])","detail attribute 값을 읽습니다."],
- getbbox_center:["getbbox_center(int geometry)","geometry bounding box 중심을 반환합니다."],
- normalize:["normalize(vector v)","벡터 길이를 1로 정규화합니다."],
+ point:["point(int geo, string attrib, int ptnum)","Point attribute 값을 읽습니다."],
+ pointattrib:["pointattrib(int geo, string attrib, int ptnum, int &success)","Point attribute를 읽고 success도 반환합니다."],
+ setpointattrib:['setpointattrib(int geo, string name, int ptnum, value, string mode="set")',"Point attribute를 수정합니다."],
+ nearpoint:["nearpoint(int geo, vector pos [, float maxdist])","가장 가까운 point를 찾습니다."],
+ nearpoints:["nearpoints(int geo, vector pos, float maxdist [, int maxpts])","주변 point들을 거리순으로 찾습니다."],
+ pcfind:["pcfind(int geo, string Pchannel, vector P, float radius, int maxpoints)","반경 내 point들을 찾습니다."],
+ prim:["prim(int geo, string attrib, int primnum)","Primitive attribute 값을 읽습니다."],
+ detail:["detail(int geo, string attrib [, int ignored])","Detail attribute 값을 읽습니다."],
+ normalize:["normalize(vector v)","벡터를 정규화합니다."],
  length:["length(vector v)","벡터 길이를 반환합니다."],
- distance:["distance(vector p1, vector p2)","두 위치 사이 거리를 반환합니다."],
- dot:["dot(vector a, vector b)","두 벡터의 dot product를 반환합니다."],
- cross:["cross(vector a, vector b)","두 벡터의 cross product를 반환합니다."],
- fit:["fit(float value, float omin, float omax, float nmin, float nmax)","값을 다른 범위로 remap합니다."],
- lerp:["lerp(value1, value2, amount)","두 값 사이를 선형 보간합니다."],
- clamp:["clamp(value, min, max)","값을 지정 범위로 제한합니다."],
- rand:["rand(seed)","seed 기반 의사 난수를 생성합니다."],
- noise:["noise(position)","위치 기반 noise 값을 생성합니다."],
- chf:['chf(string channel)',"float parameter를 읽습니다."],
- chi:['chi(string channel)',"integer parameter를 읽습니다."],
- chv:['chv(string channel)',"vector parameter를 읽습니다."],
- chramp:['chramp(string channel, float position)',"ramp parameter를 샘플링합니다."],
- addpoint:["addpoint(int geohandle, vector pos)","새 point를 생성합니다."],
- removepoint:["removepoint(int geohandle, int point_number [, int and_prims])","point를 제거합니다."],
- addprim:["addprim(int geohandle, string type, int points...)","새 primitive를 생성합니다."],
- setprimintrinsic:["setprimintrinsic(int geohandle, string name, int prim_num, value [, string mode])","primitive intrinsic 값을 수정합니다."],
- len:["len(array_or_string)","배열 또는 문자열의 길이를 반환합니다."]
+ distance:["distance(vector a, vector b)","두 위치 사이 거리를 반환합니다."],
+ dot:["dot(vector a, vector b)","Dot product를 반환합니다."],
+ cross:["cross(vector a, vector b)","Cross product를 반환합니다."],
+ fit:["fit(float v,float omin,float omax,float nmin,float nmax)","값을 다른 범위로 remap합니다."],
+ lerp:["lerp(a,b,bias)","두 값 사이를 보간합니다."],
+ clamp:["clamp(v,min,max)","값을 범위 안으로 제한합니다."],
+ rand:["rand(seed)","의사 난수를 반환합니다."],
+ noise:["noise(pos)","Noise 값을 반환합니다."],
+ chf:['chf(string name)',"Float parameter를 읽습니다."],
+ chi:['chi(string name)',"Integer parameter를 읽습니다."],
+ chv:['chv(string name)',"Vector parameter를 읽습니다."],
+ chramp:['chramp(string name,float pos)',"Ramp 값을 샘플링합니다."],
+ addpoint:["addpoint(int geo, vector pos)","Point를 추가합니다."],
+ removepoint:["removepoint(int geo,int ptnum)","Point를 제거합니다."],
+ addprim:["addprim(int geo,string type,...)","Primitive를 추가합니다."],
+ len:["len(array_or_string)","배열/문자열 길이를 반환합니다."]
 };
 
 const attributes={
- "@P":["vector @P","현재 point의 position attribute입니다."],
- "@Cd":["vector @Cd","현재 element의 color attribute입니다."],
- "@N":["vector @N","현재 element의 normal attribute입니다."],
- "@ptnum":["int @ptnum","현재 point number입니다."],
- "@primnum":["int @primnum","현재 primitive number입니다."],
- "@numpt":["int @numpt","입력 geometry의 point 개수입니다."],
- "@numprim":["int @numprim","입력 geometry의 primitive 개수입니다."],
- "@Time":["float @Time","현재 Houdini time입니다."],
- "@Frame":["float @Frame","현재 frame입니다."]
+ "@P":"vector @P","@Cd":"vector @Cd","@N":"vector @N","@ptnum":"int @ptnum",
+ "@primnum":"int @primnum","@numpt":"int @numpt","@numprim":"int @numprim",
+ "@Time":"float @Time","@Frame":"float @Frame"
 };
 
-const keywords=new Set(["if","else","for","foreach","while","do","return","break","continue","function","export"]);
-const types=new Set(["int","float","vector","vector2","vector4","string","matrix","matrix2","matrix3","dict","void"]);
+function vexCompletion(context){
+  const word=context.matchBefore(/(?:[A-Za-z_]\w*|@[A-Za-z_]\w*)/);
+  if(!word)return null;
+  if(word.from===word.to && !context.explicit)return null;
 
-const vexLanguage=StreamLanguage.define({
- startState(){return{blockComment:false}},
- token(stream,state){
-  if(state.blockComment){
-   while(!stream.eol()){
-    if(stream.match("*/")){state.blockComment=false;break}
-    stream.next()
-   }
-   return "comment"
+  const options=[
+    ...Object.entries(vexFunctions).map(([label,v])=>({
+      label,type:"function",detail:v[0],info:v[1],
+      apply(view,completion,from,to){
+        view.dispatch({
+          changes:{from,to,insert:label+"("},
+          selection:{anchor:from+label.length+1}
+        });
+      }
+    })),
+    ...Object.entries(attributes).map(([label,detail])=>({label,type:"variable",detail}))
+  ];
+
+  return {from:word.from,options,validFor:/(?:[A-Za-z_]\w*|@[A-Za-z_]\w*)/};
+}
+
+function buildDecorations(state){
+  const decos=[];
+  const text=state.doc.toString();
+
+  const fnRe=/\b([A-Za-z_]\w*)\s*(?=\()/g;
+  let m;
+  while((m=fnRe.exec(text))){
+    if(vexFunctions[m[1]]){
+      decos.push(Decoration.mark({class:"cm-vex-function"}).range(m.index,m.index+m[1].length));
+    }
   }
-  if(stream.eatSpace())return null;
-  if(stream.match("//")){stream.skipToEnd();return"comment"}
-  if(stream.match("/*")){state.blockComment=true;return"comment"}
-  if(stream.match(/"(?:[^"\\]|\\.)*"?/))return"string";
-  if(stream.match(/\b(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?\b/i))return"number";
-  if(stream.match(/(?:[fvisp]|u|[2349])?@[A-Za-z_]\w*/))return"variableName";
-  if(stream.match(/[A-Za-z_]\w*/)){
-   const w=stream.current();
-   if(keywords.has(w))return"keyword";
-   if(types.has(w))return"typeName";
-   if(vexFunctions[w])return"variableName";
-   return null
+
+  const attrRe=/(?:[fvisp]|u)?@[A-Za-z_]\w*/g;
+  while((m=attrRe.exec(text))){
+    decos.push(Decoration.mark({class:"cm-vex-attribute"}).range(m.index,m.index+m[0].length));
   }
-  if(stream.match(/[+\-*\/%=<>!&|^~?:]+/))return"operator";
-  if(stream.match(/[{}()[\],;.]/))return"punctuation";
-  stream.next();return null
- }
+
+  return Decoration.set(decos,true);
+}
+
+const vexDecorations=StateField.define({
+  create:buildDecorations,
+  update(value,tr){
+    if(tr.docChanged)return buildDecorations(tr.state);
+    return value;
+  },
+  provide:f=>EditorView.decorations.from(f)
 });
 
-const vexHighlight=HighlightStyle.define([
- {tag:tags.keyword,color:"#c792ea",fontWeight:"600"},
- {tag:tags.typeName,color:"#82aaff"},
- {tag:tags.variableName,color:"#f2d28b"},
- {tag:tags.string,color:"#c3e88d"},
- {tag:tags.number,color:"#f78c6c"},
- {tag:tags.comment,color:"#63707d",fontStyle:"italic"},
- {tag:tags.operator,color:"#89ddff"},
- {tag:tags.punctuation,color:"#aab5c0"}
-]);
-
-const defaultCode=`// VEX Pocket v0.4
-// near 를 입력하면 자동완성 후보가 나타납니다.
+const defaultCode=`// VEX Pocket v0.5
+// C++ syntax parser + VEX function completion
 
 vector center = getbbox_center(0);
 vector dir = normalize(@P - center);
@@ -329,271 +204,115 @@ float amount = chf("amount");
 @P += dir * amount;
 `;
 
-const sampleCode=`// 주변 point 평균 방향으로 이동
-int pts[] = nearpoints(0, @P, chf("radius"), chi("maxpts"));
+const initial=
+  localStorage.getItem(STORAGE_KEY) ??
+  localStorage.getItem("vex-pocket-code-v04") ??
+  localStorage.getItem("vex-pocket-code-v03") ??
+  defaultCode;
 
-vector avg = {0, 0, 0};
-foreach (int pt; pts)
-{
-    avg += point(0, "P", pt);
-}
-
-if (len(pts) > 0)
-{
-    avg /= len(pts);
-    vector dir = normalize(avg - @P);
-    @P += dir * chf("amount");
-}
-`;
-
-const statusEl=document.getElementById("status");
-const fnNameEl=document.getElementById("fnName");
-const signatureEl=document.getElementById("signature");
-const descriptionEl=document.getElementById("description");
-const toastEl=document.getElementById("toast");
-let toastTimer,saveTimer;
-
-function toast(text){
- toastEl.textContent=text;toastEl.classList.add("show");
- clearTimeout(toastTimer);toastTimer=setTimeout(()=>toastEl.classList.remove("show"),1100)
-}
-
-function setInfo(name,sig,desc){
- fnNameEl.textContent=name;signatureEl.textContent=sig;descriptionEl.textContent=desc
-}
-
-function currentWord(state){
- const pos=state.selection.main.head;
- const text=state.doc.toString();
- let s=pos,e=pos;
- const ok=c=>/[A-Za-z0-9_@]/.test(c||"");
- while(s>0&&ok(text[s-1]))s--;
- while(e<text.length&&ok(text[e]))e++;
- return {word:text.slice(s,e),from:s,to:e}
-}
-
-function prefixAtCaret(state){
- const pos=state.selection.main.head;
- const from=Math.max(0,pos-64);
- const before=state.doc.sliceString(from,pos);
- const match=before.match(/([A-Za-z_][A-Za-z0-9_]*|@[A-Za-z_][A-Za-z0-9_]*)$/);
- if(!match)return null;
- return {prefix:match[1],from:pos-match[1].length,to:pos};
-}
-
-function inspectAtCursor(state){
- const {word}=currentWord(state);
- if(vexFunctions[word])setInfo(word+"()",vexFunctions[word][0],vexFunctions[word][1]);
- else if(attributes[word])setInfo(word,attributes[word][0],attributes[word][1])
-}
-
-function updateSuggestions(state){
- const hit=prefixAtCaret(state);
- if(!hit || hit.prefix.length<2){
-  suggestWrap.classList.remove("show");
-  suggestionsEl.innerHTML="";
-  return;
- }
-
- const lower=hit.prefix.toLowerCase();
- const pool=[
-  ...Object.keys(vexFunctions).map(name=>({name,type:"function",detail:vexFunctions[name][0]})),
-  ...Object.keys(attributes).map(name=>({name,type:"attribute",detail:attributes[name][0]})),
-  ...[...types].map(name=>({name,type:"type",detail:"VEX type"})),
-  ...[...keywords].map(name=>({name,type:"keyword",detail:"VEX keyword"}))
- ];
-
- const matches=pool
-   .filter(x=>x.name.toLowerCase().startsWith(lower) && x.name.toLowerCase()!==lower)
-   .slice(0,4);
-
- if(!matches.length){
-  suggestWrap.classList.remove("show");
-  suggestionsEl.innerHTML="";
-  return;
- }
-
- suggestionsEl.innerHTML="";
- for(const item of matches){
-  const b=document.createElement("button");
-  b.type="button";
-  b.className="suggestion";
-  b.innerHTML=`<strong>${item.name}${item.type==="function"?"()":""}</strong><small>${item.detail}</small>`;
-
-  // Keep the iOS keyboard open while tapping a completion.
-  b.addEventListener("pointerdown",e=>e.preventDefault());
-  b.addEventListener("click",()=>{
-   const now=prefixAtCaret(view.state);
-   if(!now)return;
-   const insert=item.type==="function" ? item.name+"(" : item.name;
-   view.dispatch({
-    changes:{from:now.from,to:now.to,insert},
-    selection:{anchor:now.from+insert.length},
-    scrollIntoView:true
-   });
-   suggestWrap.classList.remove("show");
-   if(vexFunctions[item.name]){
-    setInfo(item.name+"()",vexFunctions[item.name][0],vexFunctions[item.name][1]);
-   }
-   view.focus();
-  });
-
-  suggestionsEl.appendChild(b);
- }
- suggestWrap.classList.add("show");
-}
-function checkCode(text){
- const stack=[],pairs={")":"(","]":"[","}":"{"};
- let quote=false,escaped=false,line=false,block=false;
- for(let i=0;i<text.length;i++){
-  const c=text[i],n=text[i+1];
-  if(line){if(c==="\n")line=false;continue}
-  if(block){if(c==="*"&&n==="/"){block=false;i++}continue}
-  if(quote){
-   if(escaped){escaped=false;continue}
-   if(c==="\\"){escaped=true;continue}
-   if(c==='"')quote=false;
-   continue
-  }
-  if(c==="/"&&n==="/"){line=true;i++;continue}
-  if(c==="/"&&n==="*"){block=true;i++;continue}
-  if(c==='"'){quote=true;continue}
-  if("([{".includes(c))stack.push(c);
-  else if(")]}".includes(c)&&stack.pop()!==pairs[c]){
-   statusEl.textContent="⚠ 괄호 확인";statusEl.className="status bad";return
-  }
- }
- if(quote){statusEl.textContent="⚠ 문자열 확인";statusEl.className="status warn";return}
- if(block){statusEl.textContent="⚠ 주석 확인";statusEl.className="status warn";return}
- if(stack.length){statusEl.textContent="⚠ 괄호 미완성";statusEl.className="status warn";return}
- statusEl.textContent="✓ 기본 검사 통과";statusEl.className="status ok"
-}
-
-const initial=localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem("vex-pocket-code-v03") ?? localStorage.getItem("vex-pocket-code-v02") ?? localStorage.getItem("vex-pocket-code-v01") ?? defaultCode;
+let saveTimer;
 
 const view=new EditorView({
- state:EditorState.create({
-  doc:initial,
-  extensions:[
-   basicSetup,
-   vexLanguage,
-   syntaxHighlighting(vexHighlight),
-   EditorView.lineWrapping,
-   EditorView.updateListener.of(update=>{
-    if(update.docChanged){
-     clearTimeout(saveTimer);
-     saveTimer=setTimeout(()=>localStorage.setItem(STORAGE_KEY,update.state.doc.toString()),160);
-     checkCode(update.state.doc.toString())
-    }
-    if(update.selectionSet||update.docChanged){
-     inspectAtCursor(update.state);
-     updateSuggestions(update.state)
-    }
-   }),
-   EditorView.domEventHandlers({
-    focus(){app.classList.add("editing")},
-    blur(){setTimeout(()=>{if(!document.activeElement?.closest(".suggestion"))suggestWrap.classList.remove("show")},120)}
-   }),
-   EditorView.theme({
-    "&":{backgroundColor:"#0b0d10",color:"#e8edf2"},
-    ".cm-content":{caretColor:"#79b8ff"},
-    ".cm-cursor":{borderLeftColor:"#79b8ff",borderLeftWidth:"2px"},
-    ".cm-selectionBackground":{backgroundColor:"rgba(121,184,255,.23)"}
-   },{dark:true})
-  ]
- }),
- parent:document.getElementById("editor")
+  state:EditorState.create({
+    doc:initial,
+    extensions:[
+      basicSetup,
+      cpp(),
+      vexDecorations,
+      autocompletion({
+        override:[vexCompletion],
+        activateOnTyping:true,
+        maxRenderedOptions:8
+      }),
+      EditorView.lineWrapping,
+      EditorView.updateListener.of(update=>{
+        if(update.docChanged){
+          clearTimeout(saveTimer);
+          saveTimer=setTimeout(()=>localStorage.setItem(STORAGE_KEY,update.state.doc.toString()),150);
+        }
+      }),
+      EditorView.theme({
+        "&":{backgroundColor:"#0b0d10",color:"#e8edf2"},
+        ".cm-content":{caretColor:"#79b8ff"},
+        ".cm-cursor":{borderLeftColor:"#79b8ff",borderLeftWidth:"2px"},
+        ".cm-tooltip":{backgroundColor:"#171c22",border:"1px solid #303842"},
+        ".cm-tooltip-autocomplete > ul > li[aria-selected]":{backgroundColor:"#253140",color:"#fff"}
+      },{dark:true})
+    ]
+  }),
+  parent:document.getElementById("editor")
 });
 
-checkCode(initial);
-
 function syncViewport(){
- const vv=window.visualViewport;
- const h=vv ? vv.height : window.innerHeight;
- document.documentElement.style.setProperty("--app-h",Math.round(h)+"px");
- const keyboardOpen=vv ? (window.innerHeight-vv.height>140) : false;
- app.classList.toggle("keyboard",keyboardOpen);
+  const vv=window.visualViewport;
+  const h=vv?vv.height:window.innerHeight;
+  document.documentElement.style.setProperty("--app-h",Math.round(h)+"px");
+  const keyboardOpen=vv?(window.innerHeight-vv.height>140):false;
+  app.classList.toggle("keyboard",keyboardOpen);
 }
 syncViewport();
 window.addEventListener("resize",syncViewport);
 if(window.visualViewport){
- visualViewport.addEventListener("resize",syncViewport);
- visualViewport.addEventListener("scroll",syncViewport);
+  visualViewport.addEventListener("resize",syncViewport);
+  visualViewport.addEventListener("scroll",syncViewport);
 }
 
 function moveVertical(dir){
- const pos=view.state.selection.main.head;
- const line=view.state.doc.lineAt(pos);
- const column=pos-line.from;
- const targetNo=Math.max(1,Math.min(view.state.doc.lines,line.number+dir));
- const target=view.state.doc.line(targetNo);
- const next=target.from+Math.min(column,target.length);
- view.dispatch({selection:{anchor:next},scrollIntoView:true});
- view.focus();
+  const pos=view.state.selection.main.head;
+  const line=view.state.doc.lineAt(pos);
+  const col=pos-line.from;
+  const targetNo=Math.max(1,Math.min(view.state.doc.lines,line.number+dir));
+  const target=view.state.doc.line(targetNo);
+  const next=target.from+Math.min(col,target.length);
+  view.dispatch({selection:{anchor:next},scrollIntoView:true});
+  view.focus();
 }
 
 document.querySelectorAll(".key").forEach(btn=>{
- // No scrolling toolbar anymore, so preventing pointerdown is safe and keeps iOS keyboard open.
- btn.addEventListener("pointerdown",e=>e.preventDefault());
- btn.addEventListener("click",()=>{
-  const action=btn.dataset.action;
-  const sel=view.state.selection.main;
-
-  if(action==="tab"){
-   const insert="    ";
-   view.dispatch({
-    changes:{from:sel.from,to:sel.to,insert},
-    selection:{anchor:sel.from+insert.length},
-    scrollIntoView:true
-   });
-   view.focus();
-   return;
-  }
-
-  if(action==="left" || action==="right"){
-   const delta=action==="left"?-1:1;
-   const next=Math.max(0,Math.min(view.state.doc.length,sel.head+delta));
-   view.dispatch({selection:{anchor:next},scrollIntoView:true});
-   view.focus();
-   return;
-  }
-
-  if(action==="up"){moveVertical(-1);return;}
-  if(action==="down"){moveVertical(1);return;}
-
-  const insert=btn.dataset.insert;
-  if(insert!==undefined){
-   const shift=Number(btn.dataset.cursor||0);
-   const next=sel.from+insert.length+shift;
-   view.dispatch({
-    changes:{from:sel.from,to:sel.to,insert},
-    selection:{anchor:next},
-    scrollIntoView:true
-   });
-   view.focus();
-  }
- })
+  btn.addEventListener("pointerdown",e=>e.preventDefault());
+  btn.addEventListener("click",()=>{
+    const action=btn.dataset.action;
+    const sel=view.state.selection.main;
+    if(action==="tab"){
+      view.dispatch({changes:{from:sel.from,to:sel.to,insert:"    "},selection:{anchor:sel.from+4},scrollIntoView:true});
+      view.focus();return;
+    }
+    if(action==="left"||action==="right"){
+      const next=Math.max(0,Math.min(view.state.doc.length,sel.head+(action==="left"?-1:1)));
+      view.dispatch({selection:{anchor:next},scrollIntoView:true});view.focus();return;
+    }
+    if(action==="up"){moveVertical(-1);return}
+    if(action==="down"){moveVertical(1);return}
+    const insert=btn.dataset.insert;
+    if(insert!==undefined){
+      const shift=Number(btn.dataset.cursor||0);
+      const next=sel.from+insert.length+shift;
+      view.dispatch({changes:{from:sel.from,to:sel.to,insert},selection:{anchor:next},scrollIntoView:true});
+      view.focus();
+    }
+  });
 });
 
-document.getElementById("doneBtn").addEventListener("click",()=>{
- view.contentDOM.blur();
- suggestWrap.classList.remove("show")
-});
+document.getElementById("doneBtn").onclick=()=>view.contentDOM.blur();
 
-document.getElementById("sampleBtn").addEventListener("click",()=>{
- const current=view.state.doc.toString();
- if(current.trim()&&!confirm("현재 코드를 예제로 바꿀까요?"))return;
- view.dispatch({changes:{from:0,to:view.state.doc.length,insert:sampleCode},selection:{anchor:0}});
- toast("예제 코드 불러옴");view.focus()
-});
+document.getElementById("sampleBtn").onclick=()=>{
+  const code=`int pts[] = nearpoints(0, @P, chf("radius"));
 
-document.getElementById("clearBtn").addEventListener("click",()=>{
- if(view.state.doc.toString().trim()&&!confirm("현재 코드를 지우고 새 파일을 시작할까요?"))return;
- const blank="// New VEX\n\n";
- view.dispatch({changes:{from:0,to:view.state.doc.length,insert:blank},selection:{anchor:blank.length}});
- setInfo("새 VEX","빈 scratch 파일","작성 내용은 자동 저장됩니다.");
- toast("새 파일");view.focus()
-});
+foreach (int pt; pts)
+{
+    vector p = point(0, "P", pt);
+    @Cd += p;
+}
+`;
+  view.dispatch({changes:{from:0,to:view.state.doc.length,insert:code},selection:{anchor:0}});
+  view.focus();
+};
+
+document.getElementById("clearBtn").onclick=()=>{
+  const code="// New VEX\n\n";
+  view.dispatch({changes:{from:0,to:view.state.doc.length,insert:code},selection:{anchor:code.length}});
+  view.focus();
+};
 </script>
 </body>
 </html>
